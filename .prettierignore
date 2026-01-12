@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+dist/
+
+# Generated files
+*.lock
+package-lock.json
+
+# Prisma generated
+prisma/generated/
+
+# Misc
+.DS_Store

@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Topic {
+  id           String    @id @default(cuid())
+  title        String
+  slug         String    @unique
+  mediaUrl     String?
+  mediaType    String    @default("image")
+  scheduledFor DateTime
+  isActive     Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  ratings      Rating[]
+
+  @@index([scheduledFor])
+  @@index([isActive])
+}
+
+model Rating {
+  id        String   @id @default(cuid())
+  topicId   String
+  deviceId  String
+  value     Int
+  hotTake   String?
+  timezone  String?
+  createdAt DateTime @default(now())
+
+  topic Topic @relation(fields: [topicId], references: [id])
+
+  @@unique([topicId, deviceId])
+  @@index([topicId])
+  @@index([deviceId])
+  @@index([createdAt])
+}
+
+model TopicSuggestion {
+  id        String   @id @default(cuid())
+  title     String
+  deviceId  String
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+
+  @@index([status])
+}
